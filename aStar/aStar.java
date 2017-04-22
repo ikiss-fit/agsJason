@@ -168,14 +168,14 @@ public class aStar extends DefaultInternalAction
         
         return path;
     }	
-
+    
     public List<Point> getObstacles(List<Term> obstacleTerms)
     {
         List<Point> obstacles = new ArrayList();
         for (Term obstacle : obstacleTerms)
         {
             String obstacleTermString = obstacle.toString();
-            String[] obstacleTermValues = obstacleTermString.substring(2, obstacleTermString.length() - 1).split(",");
+            String[] obstacleTermValues = obstacleTermString.substring(obstacleTermString.indexOf("(") + 1, obstacleTermString.indexOf(")")).split(",");
             obstacles.add(new Point(Integer.parseInt(obstacleTermValues[0]), Integer.parseInt(obstacleTermValues[1])));
         }
         
