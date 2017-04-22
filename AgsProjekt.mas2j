@@ -1,9 +1,13 @@
-/* Jason Project */
-
-MAS agsProjekt {
-
+/* Jason Project */
+
+
+
+MAS agsProjekt {
+
+
+
     infrastructure : Centralised
-	environment : mining . MiningPlanet (5 ,50 , yes)
+	environment : mining . MiningPlanet (1 ,50 , yes)
 	// parameters : 1. environment configuration id (from 1 to 6)
 	// 2. sleep time (in ms) after each action
 	// 3. whether display the gui
@@ -14,5 +18,6 @@ MAS agsProjekt {
 	bSlow teamASlow ;
 	bMiddle teamAMiddle ;
 	bFast teamAFast ;
-}
+}
+
 
