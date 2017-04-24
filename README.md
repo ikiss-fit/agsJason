@@ -1,5 +1,4 @@
 # AGS Jason
-# asdf
 
 Projekt do AGS v Jasonu
 
