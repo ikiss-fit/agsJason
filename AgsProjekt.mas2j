@@ -12,9 +12,9 @@ MAS agsProjekt {
 	// 2. sleep time (in ms) after each action
 	// 3. whether display the gui
 	agents :
-	aSlow teamASlow ;
-	aMiddle teamAMiddle ;
-	aFast teamAFast ;
+	aSlow xkissm00Slow ;
+	aMiddle xkissm00Middle ;
+	aFast xkissm00Fast ;
 	bSlow teamySlow ;
 	bMiddle teamyMiddle ;
 	bFast teamyFast ;
