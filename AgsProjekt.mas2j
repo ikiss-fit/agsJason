@@ -15,9 +15,9 @@ MAS agsProjekt {
 	aSlow teamASlow ;
 	aMiddle teamAMiddle ;
 	aFast teamAFast ;
-	bSlow teamASlow ;
-	bMiddle teamAMiddle ;
-	bFast teamAFast ;
+	bSlow teamySlow ;
+	bMiddle teamyMiddle ;
+	bFast teamyFast ;
 }
 
 
