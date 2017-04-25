@@ -4,7 +4,6 @@
 +step(0) <- ?grid_size(A,B);
 			+max_right(A);
 			+max_down(B);
-			+target(7,34);
 			!work.
 
 +step(X) <- !work.
@@ -17,14 +16,14 @@
 				 for ( wood(Xw,Yw) ) { +wood_pos(Xw,Yw); .broadcast(tell, wood_pos(Xw,Yw)); }
 				 for ( obstacle(Xo,Yo) ) { +obstacle_pos(Xo,Yo); .broadcast(tell, obstacle_pos(Xo,Yo)); }
 				 if ( spectacles(Xsp,Ysp) ) { +spectacles_pos(Xsp,Ysp); }
-				 if ( shoes(Xsh,Ysh) ) { +spectacles_pos(Xsh,Ysh); .send(aFast, tell, shooes_pos(Xsh,Ysh)); }.
+				 if ( shoes(Xsh,Ysh) ) { +spectacles_pos(Xsh,Ysh); .send(aFast, tell, shoes_pos(Xsh,Ysh)); }.
 
 +!decide_target: target(_,_).
-+!decide_target <- +target(math.floor(math.random * 34), math.floor(math.random * 34)).
++!decide_target <- +target(math.floor(math.random * 35), math.floor(math.random * 35)).
 
 
 +!go_to_target: pos(X,Y) & target(Xt,Yt) & X < Xt <- do(right).
 +!go_to_target: pos(X,Y) & target(Xt,Yt) & X > Xt <- do(left).
 +!go_to_target: pos(X,Y) & target(Xt,Yt) & Y < Yt <- do(down).
 +!go_to_target: pos(X,Y) & target(Xt,Yt) & Y > Yt <- do(up).
-+!go_to_target: target(A,B) <- -target(A,B); .println("jsem tu"); do(skip).
++!go_to_target: target(A,B) <- 			-target(A,B); do(skip).
