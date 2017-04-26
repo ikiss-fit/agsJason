@@ -12,7 +12,6 @@
 @do_it[atomic]+!work: dont_work(C) & C == 2 <- -dont_work(2); +dont_work(1).
 @just_do_it[atomic]+!work: dont_work(C) & C == 1 <- -dont_work(1).
 +!work <- !look_around;
-			-go_to_depot;
 			-pick_up;
 			-wait;
 			-call_help;
@@ -28,6 +27,10 @@
 +!decide_action: i_am_here & pos(X,Y) & depot(X,Y) & moves_left(Mvs) <-
 				 if (Mvs == 3) { -target(X,Y); +deposit; }
 				 else			{ +wait; }.
++!decide_action: i_am_here & pos(X,Y) & not gold(X,Y) & not wood(X,Y) <-
+				.println("this should never happend in training mode");
+				 .wait(5000);
+				 +wait.
 +!decide_action: i_am_here & pos(X,Y) & ally(X,Y) & moves_left(Mvs) <-
 				 if (Mvs == 3) { -target(X,Y); +pick_up; }
 				 else 			{ +wait; }.
@@ -38,7 +41,9 @@
 +!decide_action: gold_pos(X,Y) & carrying_wood(Cw) & Cw == 0 <-
 				 +target(X,Y);
 				 +call_help.
-+!decide_action: wood_pos(X,Y) & carrying_gold(Cg) & Cg == 0 <- +target(X,Y); +call_help.
++!decide_action: wood_pos(X,Y) & carrying_gold(Cg) & Cg == 0 <-
+				 +target(X,Y); 
+				 +call_help.
 +!decide_action: carrying_gold(Cg) & Cg > 0 <-
 				 ?depot(X,Y);
 				 +target(X,Y).
