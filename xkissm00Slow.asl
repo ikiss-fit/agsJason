@@ -16,7 +16,7 @@
 				 for ( wood(Xw,Yw) ) { +wood_pos(Xw,Yw); .broadcast(tell, wood_pos(Xw,Yw)); }
 				 for ( obstacle(Xo,Yo) ) { +obstacle_pos(Xo,Yo); .broadcast(tell, obstacle_pos(Xo,Yo)); }
 				 if ( spectacles(Xsp,Ysp) ) { +spectacles_pos(Xsp,Ysp); }
-				 if ( shoes(Xsh,Ysh) ) { +spectacles_pos(Xsh,Ysh); .send(aFast, tell, shoes_pos(Xsh,Ysh)); }.
+				 if ( shoes(Xsh,Ysh) ) { +shoes_pos(Xsh,Ysh); .send(aFast, tell, shoes_pos(Xsh,Ysh)); }.
 
 +!decide_target: target(_,_).
 +!decide_target <- +target(math.floor(math.random * 35), math.floor(math.random * 35)).
