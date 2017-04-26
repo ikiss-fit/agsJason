@@ -9,8 +9,8 @@
 +step(X): moves_per_round(3) <- !work; !work; !work.
 
 // every step = 3x work round (or 6x with shoes)
-+!work: dont_work(C) & C == 2 <- -dont_work(2); +dont_work(1).
-+!work: dont_work(C) & C == 1 <- -dont_work(1).
+@do_it[atomic]+!work: dont_work(C) & C == 2 <- -dont_work(2); +dont_work(1).
+@just_do_it[atomic]+!work: dont_work(C) & C == 1 <- -dont_work(1).
 +!work <- !look_around;
 			-go_to_depot;
 			-pick_up;
