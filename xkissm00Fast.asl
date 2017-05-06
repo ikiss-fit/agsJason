@@ -1,4 +1,5 @@
 +step(0) <- ?grid_size(A,B);
+			!get_middle;
 			+max_left(0);
 			+max_right(A);
 			+max_up(0);
@@ -8,23 +9,28 @@
 +step(X): moves_per_round(6) <- !work; !work; !work; !work; !work; !work.
 +step(X): moves_per_round(3) <- !work; !work; !work.
 
++!get_middle: friend(aMiddle) <- +middle_friend(aMiddle).
++!get_middle: friend(bMiddle) <- +middle_friend(bMiddle).
+
 // every step = 3x work round (or 6x with shoes)
 @do_it[atomic]+!work: dont_work(C) & C == 2 <- -dont_work(2); +dont_work(1).
 @just_do_it[atomic]+!work: dont_work(C) & C == 1 <- -dont_work(1).
-+!work <- !look_around;
-			-pick_up;
++!work <- 	-pick_up;
 			-wait;
 			-call_help;
 		  	!decide_action;
 			!do_action.
 
-// work 1. - look around
-+!look_around.			
-+!look_around <- .println("looking around");
-				 for ( gold(X,Y) ) { +gold_pos(X, Y); };
-				 for ( wood(X,Y) ) { +wood_pos(X, Y); }.
-
-// work 2. - decide next action in this work round
++!decide_action: i_am_here & pos(X,Y) & gold_pos(X,Y) & not gold(X,Y) <-
+				 .abolish(i_am_here);
+				 .abolish(target(X,Y));
+				 .abolish(gold_pos(X,Y));
+				 +wait.
++!decide_action: i_am_here & pos(X,Y) & wood_pos(X,Y) & not wood(X,Y) <-
+				 .abolish(i_am_here);
+				 .abolish(target(X,Y));
+				 .abolish(wood_pos(X,Y));
+				 +wait.
 +!decide_action: i_am_here & pos(X,Y) & depot(X,Y) & moves_left(Mvs) <-
 				 if (Mvs == 3) { -target(X,Y); +deposit; }
 				 else			{ +wait; }.
@@ -49,31 +55,19 @@
 				 +target(X,Y).
 +!decide_action  <- +wait.
 
-// work 3. - execute the action
 // an action MUST end with skip, drop, pick or go_to_target
 +!do_action: wait <- do(skip).
 +!do_action: call_help & target(X,Y) <- 
-			.send(aMiddle, tell, come(X,Y));
+			?middle_friend(Middle);
+			.send(Middle, achieve, come(X,Y));
 			-call_help;
 			?moves_left(MVS);
-			if (MVS > 0) { !go_to_target; }. // is this always true?
+			if (MVS > 0) { !go_to_target; }.
 +!do_action: deposit <-
 			-i_am_here;
 			-deposit;
 			+dont_work(2);
 			do(drop).
-+!do_action: pick_up & pos(X,Y) & gold_pos(X,Y) & not gold(X,Y) <-
-			-i_am_here;
-			.abolish(gold_pos(X,Y));
-			-pick_up;
-			.abolish(target(X,Y));
-			do(skip).
-+!do_action: pick_up & pos(X,Y) & wood_pos(X,Y) & not wood(X,Y) <-
-			-i_am_here;
-			.abolish(wood_pos(X,Y));
-			-pick_up;
-			.abolish(target(X,Y));
-			do(skip).			
 +!do_action: pick_up & pos(X,Y) & gold_pos(X,Y) <- 
 			-i_am_here;
 			.abolish(gold_pos(X,Y));
