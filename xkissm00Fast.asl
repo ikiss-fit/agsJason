@@ -114,6 +114,7 @@
 	?max_down(Height);
 	aStar.aStar(X,Y, Xt,Yt, Obs, Width, Height, D);
 	!lets_move(D);.
++!go_to_target <- -i_am_here; -target(_,_); do(skip).
 
 +!lets_move(0) <- -target(_,_); do(skip).
 +!lets_move(1) <- do(up).

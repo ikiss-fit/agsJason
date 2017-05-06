@@ -39,9 +39,9 @@ public class aStar extends DefaultInternalAction
         }
     }
 
-    public List<Square> getWalkable(Square square, List<Point> obstacles, int width, int height)
+    public ArrayList<Square> getWalkable(Square square, List<Point> obstacles, int width, int height)
     {
-        List<Square> walkable = new ArrayList();
+        ArrayList<Square> walkable = new ArrayList<Square>();
         Square squareUp = new Square(new Point(square.coordinates.x, square.coordinates.y + 1), square);
         Square squareDown = new Square(new Point(square.coordinates.x, square.coordinates.y - 1), square);
         Square squareRight = new Square(new Point(square.coordinates.x + 1, square.coordinates.y), square);
@@ -113,8 +113,8 @@ public class aStar extends DefaultInternalAction
     public List<Square> aStarAlg(Point start, Point end, List<Point> obstacles, int width, int height)
     {
         Square startSquare = new Square(start, null);
-        List<Square> open = getWalkable(startSquare, obstacles, width, height);
-        List<Square> closed = new ArrayList();
+        ArrayList<Square> open = getWalkable(startSquare, obstacles, width, height);
+        ArrayList<Square> closed = new ArrayList<Square>();
         closed.add(startSquare);
         
         while (!open.isEmpty())
@@ -156,7 +156,7 @@ public class aStar extends DefaultInternalAction
     
     public List<Square> getPath(List<Square> squares)
     {
-        List<Square> path = new ArrayList();
+        ArrayList<Square> path = new ArrayList<Square>();
         
         Square s = squares.get(squares.size() - 1);
         
@@ -171,7 +171,7 @@ public class aStar extends DefaultInternalAction
     
     public List<Point> getObstacles(List<Term> obstacleTerms)
     {
-        List<Point> obstacles = new ArrayList();
+        ArrayList<Point> obstacles = new ArrayList<Point>();
         for (Term obstacle : obstacleTerms)
         {
             String obstacleTermString = obstacle.toString();
