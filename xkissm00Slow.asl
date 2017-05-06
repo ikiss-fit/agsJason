@@ -1,10 +1,11 @@
-// Slow agent - 1 move, sees 3 pieces far
-// only searches the map
-
 +step(0) <- ?grid_size(A,B);
 			!get_friends;
 			+max_right(A);
 			+max_down(B);
+			+systematic_movement;
+			+target(0,0);
+			+last_target(0,0);
+			+view(3);
 			!work.
 
 +step(X) <- !work.
@@ -48,12 +49,40 @@
 				 }.
 
 +!decide_target: target(_,_).
-+!decide_target <- +target(math.floor(math.random * 35), math.floor(math.random * 35)).
++!decide_target: systematic_movement & last_target(Lx,Ly) & Lx == 0 <-
+	-last_target(Lx,Ly); 
+	?max_right(Mx); 
+	+target(Mx-1, Ly); 
+	+last_target(Mx-1,Ly).
++!decide_target: systematic_movement & last_target(Lx,Ly) & max_down(My) & view(W) & Ly + 2*W - 1 < My <-
+	-last_target(Lx,Ly);
+	+target(0, Ly + 2*W - 1);
+	+last_target(0, Ly + 2*W - 1).
++!decide_target: systematic_movement <-
+	?max_right(Mx); 
+	?max_down(My); 
+	-last_target(_,_); 
+	+target(0, My-1); 
+	+last_target(0, My-1); 
+	-systematic_movement.
++!decide_target <- 
+	?max_right(Width); 
+	?max_down(Height); 
+	+target(math.floor(math.random * Width), math.floor(math.random * Height)).
 
++!go_to_target: obstacle_pos(X,Y) & target(X,Y) <- -target(X,Y); do(skip).
++!go_to_target: target(X,Y) & spectacles(X,Y) <- -target(A,B); +glasses; -view(3); +view(6); do(pick).
++!go_to_target: target(X,Y) & pos(X,Y) <- -target(X,Y); do(skip).
++!go_to_target: pos(X,Y) & target(Xt,Yt) <- 
+	.findall(o(A,B), obstacle_pos(A,B), Obs);  
+	?max_right(Width);
+	?max_down(Height);
+	aStar.aStar(X,Y, Xt,Yt, Obs, Width, Height, D);
+	!lets_move(D);.
 
-+!go_to_target: pos(X,Y) & target(Xt,Yt) & X < Xt <- do(right).
-+!go_to_target: pos(X,Y) & target(Xt,Yt) & X > Xt <- do(left).
-+!go_to_target: pos(X,Y) & target(Xt,Yt) & Y < Yt <- do(down).
-+!go_to_target: pos(X,Y) & target(Xt,Yt) & Y > Yt <- do(up).
-+!go_to_target: target(X,Y) & spectacles(X,Y) <- -target(A,B); +glasses; do(pick).
-+!go_to_target: target(A,B) <- 			-target(A,B); do(skip).
++!lets_move(0) <- -target(_,_); do(skip).
++!lets_move(1) <- do(up).
++!lets_move(2) <- do(right).
++!lets_move(3) <- do(down).
++!lets_move(4) <- do(left).
+

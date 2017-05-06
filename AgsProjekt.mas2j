@@ -7,30 +7,31 @@ MAS agsProjekt {
 
 
     infrastructure : Centralised
-	environment : mining . MiningPlanet (1 ,50 , yes)
-	// parameters : 1. environment configuration id (from 1 to 6)
+	environment : mining . MiningPlanet (6 ,50 , yes)
+	// parameters : 
+	// 1. environment configuration id (from 1 to 6)
 	// 2. sleep time (in ms) after each action
 	// 3. whether display the gui
 	agents :
-	/*
+	
 	aSlow xkissm00Slow ;
 	aMiddle xkissm00Middle ;
 	aFast xkissm00Fast ;
 	bSlow teamySlow ;
 	bMiddle teamyMiddle ;
-	bFast teamyFast ;*/
+	bFast teamyFast ;
 	/*aSlow teamySlow ;
 	aMiddle teamyMiddle ;
 	aFast teamyFast ;
 	bSlow xkissm00Slow ;
 	bMiddle xkissm00Middle ;
 	bFast xkissm00Fast ;*/
-	aSlow xkissm00Slow ;
+	/*aSlow xkissm00Slow ;
 	aMiddle xkissm00Middle ;
 	aFast xkissm00Fast ;
 	bSlow xkissm00Slow ;
 	bMiddle xkissm00Middle ;
-	bFast xkissm00Fast ;
+	bFast xkissm00Fast ;*/
 }
 
 

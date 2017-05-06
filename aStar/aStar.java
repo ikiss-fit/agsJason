@@ -208,43 +208,45 @@ public class aStar extends DefaultInternalAction
 		int width = (int) ((NumberTerm)args[5]).solve();
 		int height = (int) ((NumberTerm)args[6]).solve();
 		
-		//System.out.println("I want to go from [" + startX + "; " + startY + "] to [" + endX + "; " + endY + "].");
-		//System.out.println("Obstacles " + obstacles + " !");
-		//System.out.println("Obstacles " + getObstacles(obstacles) + " !");
-		
 		Point startPoint = new Point(startX, startY);
+                Point endPoint = new Point(endX, endY);
 		
-		List<Square> path = aStarAlg(startPoint, new Point(endX, endY), getObstacles(obstacles), width, height);
-		Square nextStep = path.get(0);
-		
-		// up or down
-		if(nextStep.coordinates.x == startPoint.x)
-		{
-			// down
-			if(nextStep.coordinates.y == startPoint.y + 1)
-			{
-				move = 3;
-			}
-			// up
-			else
-			{
-				move = 1;
-			}
-		}
-		// right or left
-		else
-		{
-			// right
-			if(nextStep.coordinates.x == startPoint.x + 1)
-			{
-				move = 2;
-			}
-			// left
-			else
-			{
-				move = 4;
-			}
-		}
+		List<Square> path = aStarAlg(startPoint, endPoint, getObstacles(obstacles), width, height);
+		Square last = path.get(path.size() -1);
+                
+                if(last.coordinates.equals(endPoint))
+                {
+                    Square nextStep = path.get(0);
+
+                    // up or down
+                    if(nextStep.coordinates.x == startPoint.x)
+                    {
+                            // down
+                            if(nextStep.coordinates.y == startPoint.y + 1)
+                            {
+                                    move = 3;
+                            }
+                            // up
+                            else
+                            {
+                                    move = 1;
+                            }
+                    }
+                    // right or left
+                    else
+                    {
+                            // right
+                            if(nextStep.coordinates.x == startPoint.x + 1)
+                            {
+                                    move = 2;
+                            }
+                            // left
+                            else
+                            {
+                                    move = 4;
+                            }
+                    }
+                }
 		
 		
 		return un.unifies(args[7], new NumberTermImpl(move)); 

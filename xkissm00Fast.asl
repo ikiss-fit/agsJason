@@ -1,5 +1,5 @@
 +step(0) <- ?grid_size(A,B);
-			!get_middle;
+			!get_friends;
 			+max_left(0);
 			+max_right(A);
 			+max_up(0);
@@ -9,17 +9,38 @@
 +step(X): moves_per_round(6) <- !work; !work; !work; !work; !work; !work.
 +step(X): moves_per_round(3) <- !work; !work; !work.
 
-+!get_middle: friend(aMiddle) <- +middle_friend(aMiddle).
-+!get_middle: friend(bMiddle) <- +middle_friend(bMiddle).
++!get_friends: friend(aSlow) <- +slow_friend(aSlow); +middle_friend(aMiddle).
++!get_friends: friend(bSlow) <- +slow_friend(bSlow); +middle_friend(bMiddle).
+
 
 // every step = 3x work round (or 6x with shoes)
 @do_it[atomic]+!work: dont_work(C) & C == 2 <- -dont_work(2); +dont_work(1).
 @just_do_it[atomic]+!work: dont_work(C) & C == 1 <- -dont_work(1).
-+!work <- 	-pick_up;
++!work <-	!look_around;
+			-pick_up;
 			-wait;
 			-call_help;
 		  	!decide_action;
 			!do_action.
+			
++!look_around <- for ( gold(Xg,Yg) )
+				 {
+				     +gold_pos(Xg,Yg);
+				 }
+				 
+				 for ( wood(Xw,Yw) ) 
+				 { 
+				     +wood_pos(Xw,Yw);
+				 }
+				 
+				 for ( obstacle(Xo,Yo) )
+				 {
+				     +obstacle_pos(Xo,Yo); 
+					 ?slow_friend(Slow); 
+					 .send(Slow, tell, obstacle_pos(Xo,Yo)); 
+					 ?middle_friend(Middle); 
+					 .send(Middle, tell, obstacle_pos(Xo,Yo));
+				 }.
 
 +!decide_action: i_am_here & pos(X,Y) & gold_pos(X,Y) & not gold(X,Y) <-
 				 .abolish(i_am_here);
@@ -39,6 +60,9 @@
 				 else 			{ +wait; }.
 +!decide_action: target(X,Y).
 +!decide_action: carrying_gold(Gn) & carrying_capacity(Gmax) & Gn == Gmax <-
+				 ?depot(X,Y);
+				 +target(X,Y).
++!decide_action: carrying_wood(Wn) & carrying_capacity(Wmax) & Wn == Wmax <-
 				 ?depot(X,Y);
 				 +target(X,Y).
 +!decide_action: gold_pos(X,Y) & carrying_wood(Cw) & Cw == 0 <-
@@ -83,11 +107,19 @@
 +!do_action: target(_,_) <- !go_to_target.
 
 
-+!go_to_target: pos(X,Y) & target(Xt,Yt) & X < Xt <- do(right).
-+!go_to_target: pos(X,Y) & target(Xt,Yt) & X > Xt <- do(left).
-+!go_to_target: pos(X,Y) & target(Xt,Yt) & Y < Yt <- do(down).
-+!go_to_target: pos(X,Y) & target(Xt,Yt) & Y > Yt <- do(up).
 +!go_to_target: pos(X,Y) & target(X,Y) <- +i_am_here; do(skip).
++!go_to_target: pos(X,Y) & target(Xt,Yt) <- 
+	.findall(o(A,B), obstacle_pos(A,B), Obs);  
+	?max_right(Width);
+	?max_down(Height);
+	aStar.aStar(X,Y, Xt,Yt, Obs, Width, Height, D);
+	!lets_move(D);.
+
++!lets_move(0) <- -target(_,_); do(skip).
++!lets_move(1) <- do(up).
++!lets_move(2) <- do(right).
++!lets_move(3) <- do(down).
++!lets_move(4) <- do(left).
 
 // +step(X): shoes(A,B)&pos(A,B)<-do(pick)
 
