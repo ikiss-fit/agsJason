@@ -20,17 +20,14 @@
 
 // work 1. - look around
 +!look_around.			
-+!look_around <- for ( gold(X,Y) ) { +gold_pos(X, Y); };
++!look_around <- .println("looking around");
+				 for ( gold(X,Y) ) { +gold_pos(X, Y); };
 				 for ( wood(X,Y) ) { +wood_pos(X, Y); }.
 
 // work 2. - decide next action in this work round
 +!decide_action: i_am_here & pos(X,Y) & depot(X,Y) & moves_left(Mvs) <-
 				 if (Mvs == 3) { -target(X,Y); +deposit; }
 				 else			{ +wait; }.
-+!decide_action: i_am_here & pos(X,Y) & not gold(X,Y) & not wood(X,Y) <-
-				.println("this should never happend in training mode");
-				 .wait(5000);
-				 +wait.
 +!decide_action: i_am_here & pos(X,Y) & ally(X,Y) & moves_left(Mvs) <-
 				 if (Mvs == 3) { -target(X,Y); +pick_up; }
 				 else 			{ +wait; }.
@@ -60,12 +57,29 @@
 			-call_help;
 			?moves_left(MVS);
 			if (MVS > 0) { !go_to_target; }. // is this always true?
-+!do_action: deposit <- -i_am_here; -deposit; +dont_work(2); do(drop).
++!do_action: deposit <-
+			-i_am_here;
+			-deposit;
+			+dont_work(2);
+			do(drop).
++!do_action: pick_up & pos(X,Y) & gold_pos(X,Y) & not gold(X,Y) <-
+			-i_am_here;
+			.abolish(gold_pos(X,Y));
+			-pick_up;
+			.abolish(target(X,Y));
+			do(skip).
++!do_action: pick_up & pos(X,Y) & wood_pos(X,Y) & not wood(X,Y) <-
+			-i_am_here;
+			.abolish(wood_pos(X,Y));
+			-pick_up;
+			.abolish(target(X,Y));
+			do(skip).			
 +!do_action: pick_up & pos(X,Y) & gold_pos(X,Y) <- 
 			-i_am_here;
 			.abolish(gold_pos(X,Y));
 			+dont_work(2);
-			-pick_up; do(pick).
+			-pick_up;
+			do(pick).
 +!do_action: pick_up & pos(X,Y) & wood_pos(X,Y) <-
 			-i_am_here; 
 			.abolish(wood_pos(X,Y));
@@ -79,7 +93,7 @@
 +!go_to_target: pos(X,Y) & target(Xt,Yt) & X > Xt <- do(left).
 +!go_to_target: pos(X,Y) & target(Xt,Yt) & Y < Yt <- do(down).
 +!go_to_target: pos(X,Y) & target(Xt,Yt) & Y > Yt <- do(up).
-+!go_to_target: target(A,B) <-			 +i_am_here; do(skip).
++!go_to_target: pos(X,Y) & target(X,Y) <- +i_am_here; do(skip).
 
 // +step(X): shoes(A,B)&pos(A,B)<-do(pick)
 
